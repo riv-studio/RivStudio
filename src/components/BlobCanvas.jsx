@@ -22,10 +22,23 @@ function BlobMesh({ mouse }) {
     const maxScroll = (document.documentElement.scrollHeight - window.innerHeight) || 1;
     const scrollPercent = window.scrollY / maxScroll;
 
-    // Center the blob on mobile screens (baseX = 0) so it doesn't float off-screen
-    // Slide side-to-side on desktop viewports
+    // Slide side-to-side on scroll.
+    // On mobile viewports (narrow screens), slide within a narrower safe range (0.55 / -0.55) to prevent off-screen clipping.
+    // On desktop viewports, slide within a wider range (1.3 / -1.6).
     let baseX = 0;
-    if (!isMobileWidth) {
+    if (isMobileWidth) {
+      if (scrollPercent < 0.2) {
+        baseX = 0.55; // Hero section (slightly right)
+      } else if (scrollPercent >= 0.2 && scrollPercent < 0.45) {
+        baseX = -0.55; // Services section (slightly left)
+      } else if (scrollPercent >= 0.45 && scrollPercent < 0.75) {
+        baseX = 0.55; // Process section (slightly right)
+      } else if (scrollPercent >= 0.75 && scrollPercent < 0.9) {
+        baseX = -0.55; // Why Us section (slightly left)
+      } else {
+        baseX = 0; // Pricing/Footer section (centered)
+      }
+    } else {
       if (scrollPercent < 0.2) {
         baseX = 1.3; // Hero (right)
       } else if (scrollPercent >= 0.2 && scrollPercent < 0.45) {
@@ -39,7 +52,7 @@ function BlobMesh({ mouse }) {
       }
     }
 
-    // Base Y floats down with scroll, slightly adjusted on mobile
+    // Base Y floats down with scroll
     const baseY = -scrollPercent * (isMobileWidth ? 2.5 : 3.5); 
 
     // Scale mesh dynamically based on screen width
