@@ -1,6 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { Menu, X } from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
 import logoImg from '../assets/logo.jpg';
 
 const navLinks = [
@@ -13,7 +11,6 @@ const navLinks = [
 
 export default function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -46,7 +43,7 @@ export default function Navbar() {
         </a>
 
         {/* Desktop Navigation Links */}
-        <div className="hidden md:flex items-center gap-8">
+        <div className="hidden md:flex items-center gap-8 font-sora">
           {navLinks.map((link) => (
             <a
               key={link.name}
@@ -57,43 +54,7 @@ export default function Navbar() {
             </a>
           ))}
         </div>
-
-
-
-        {/* Mobile Hamburger Toggle */}
-        <button
-          onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-          className="p-2 md:hidden text-white hover:text-brand-orange transition-colors"
-          aria-label="Toggle menu"
-        >
-          {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
-        </button>
       </div>
-
-      {/* Mobile Drawer Overlay */}
-      <AnimatePresence>
-        {mobileMenuOpen && (
-          <motion.div
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            transition={{ duration: 0.2 }}
-            className="absolute top-full left-0 w-full bg-brand-darkBg/95 border-b border-brand-darkBorder glass-panel py-6 px-6 flex flex-col gap-5 md:hidden"
-          >
-            {navLinks.map((link) => (
-              <a
-                key={link.name}
-                href={link.href}
-                onClick={() => setMobileMenuOpen(false)}
-                className="font-sora font-semibold text-lg text-white hover:text-brand-orange transition-colors"
-              >
-                {link.name}
-              </a>
-            ))}
-
-          </motion.div>
-        )}
-      </AnimatePresence>
     </nav>
   );
 }

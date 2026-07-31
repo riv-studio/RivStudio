@@ -1,7 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { Mail, MessageSquare } from 'lucide-react';
 import logoImg from '../assets/logo.jpg';
 
 gsap.registerPlugin(ScrollTrigger);
@@ -53,26 +52,7 @@ export default function Footer() {
           </p>
         </div>
 
-        {/* Minimalist Contact Links */}
-        <div className="flex flex-col sm:flex-row gap-6 sm:gap-12 items-center justify-center pt-4 border-t border-white/5 w-full max-w-xl">
-          <a 
-            href="mailto:hello@rivstudio.com" 
-            className="flex items-center gap-2 text-xs sm:text-sm text-brand-mutedText hover:text-brand-orange transition-colors font-mono"
-          >
-            <Mail size={16} className="text-brand-orange" />
-            hello@rivstudio.com
-          </a>
-          
-          <a 
-            href="https://wa.me/31612345678" 
-            target="_blank" 
-            rel="noreferrer"
-            className="flex items-center gap-2 text-xs sm:text-sm text-brand-mutedText hover:text-brand-orange transition-colors font-mono"
-          >
-            <MessageSquare size={16} className="text-brand-orange" />
-            +31 6 1234 5678
-          </a>
-        </div>
+
 
         {/* Footer bottom links and copyright */}
         <div className="w-full pt-12 border-t border-white/5 flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-brand-mutedText">

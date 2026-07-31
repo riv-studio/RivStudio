@@ -19,7 +19,7 @@ function App() {
   const [isLoading, setIsLoading] = useState(true);
 
   return (
-    <div className={`min-h-screen bg-brand-darkBg text-white relative ${isLoading ? 'overflow-hidden h-screen' : ''}`}>
+    <div className={`min-h-screen bg-brand-darkBg text-white relative overflow-x-hidden w-full ${isLoading ? 'overflow-hidden h-screen' : ''}`}>
       {/* 
         Awwwards-style Percentage count-up Preloader (00 to 100) 
         Locks window scroll, count-up completes, then slides up.
