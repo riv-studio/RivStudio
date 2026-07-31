@@ -1,6 +1,15 @@
 import React, { useState, useEffect } from 'react';
-import { Menu, X, ArrowUpRight } from 'lucide-react';
+import { Menu, X } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import logoImg from '../assets/logo.jpg';
+
+const navLinks = [
+  { name: 'Services', href: '#services' },
+  { name: 'Process', href: '#process' },
+  { name: 'Why Us', href: '#why-us' },
+  { name: 'Pricing', href: '#pricing' },
+  { name: 'Contact', href: '#contact' }
+];
 
 export default function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -18,14 +27,6 @@ export default function Navbar() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const navLinks = [
-    { name: 'Work', href: '#work' },
-    { name: 'Services', href: '#services' },
-    { name: 'Process', href: '#process' },
-    { name: 'Why Us', href: '#why-us' },
-    { name: 'Pricing', href: '#pricing' },
-  ];
-
   return (
     <nav
       className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 ${
@@ -37,12 +38,11 @@ export default function Navbar() {
       <div className="max-w-7xl mx-auto px-6 md:px-12 flex items-center justify-between">
         {/* Brand Logo */}
         <a href="#" className="flex items-center gap-2 group">
-          <div className="w-8 h-8 rounded bg-brand-orange flex items-center justify-center font-sora font-extrabold text-black text-lg transition-transform duration-300 group-hover:rotate-6">
-            R
-          </div>
-          <span className="font-sora font-bold text-lg tracking-tight text-white group-hover:text-brand-orange transition-colors">
-            Riv Studio<span className="text-brand-orange">.</span>
-          </span>
+          <img 
+            src={logoImg} 
+            alt="Riv Studio Logo" 
+            className="h-10 w-auto rounded object-contain transition-transform duration-300 group-hover:scale-[1.05]" 
+          />
         </a>
 
         {/* Desktop Navigation Links */}

@@ -2,6 +2,7 @@ import React, { useEffect, useRef } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { Mail, MessageSquare } from 'lucide-react';
+import logoImg from '../assets/logo.jpg';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -40,12 +41,13 @@ export default function Footer() {
         ref={contentRef}
         className="max-w-7xl mx-auto relative z-10 flex flex-col justify-between items-center text-center gap-12"
       >
-        {/* Large Typographic Branding */}
-        <div className="space-y-4">
-          <div className="font-sora font-extrabold text-[12vw] sm:text-[8vw] md:text-[6vw] tracking-tighter leading-none flex justify-center items-center gap-1">
-            <span className="text-stroke">RIV</span>
-            <span className="text-brand-orange">STUDIO</span>
-          </div>
+        {/* Large Brand Logo Image */}
+        <div className="space-y-4 flex flex-col items-center">
+          <img 
+            src={logoImg} 
+            alt="Riv Studio Logo" 
+            className="h-20 w-auto rounded-xl object-contain transition-transform duration-500 hover:scale-[1.05]" 
+          />
           <p className="text-brand-mutedText text-sm sm:text-base font-light tracking-wide max-w-sm mx-auto">
             Bespoke web layouts for local cafes, boutique gyms, and dining bistros.
           </p>

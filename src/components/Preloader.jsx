@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import logoImg from '../assets/logo.jpg';
 
 export default function Preloader({ onComplete }) {
   const [count, setCount] = useState(0);
@@ -43,7 +44,7 @@ export default function Preloader({ onComplete }) {
         >
           {/* Top Logo */}
           <div className="flex justify-between items-center text-xs font-bold tracking-widest text-[#FF5500] uppercase font-sora">
-            <span>RIV STUDIO</span>
+            <img src={logoImg} alt="Riv Studio Logo" className="h-6 w-auto object-contain rounded" />
             <span>Est. 2026</span>
           </div>
 

@@ -2,6 +2,7 @@ import React, { useEffect, useRef } from 'react';
 import gsap from 'gsap';
 import { ShieldCheck, Flame, Zap, ChevronDown } from 'lucide-react';
 import ThreeCanvas from '../components/ThreeCanvas';
+import logoImg from '../assets/logo.jpg';
 
 const marqueeItems = [
   "Boutique Gyms", "Neighborhood Cafes", "Local Retail Shops", "Fine Dining Bistros",
@@ -119,11 +120,11 @@ export default function Hero() {
         {/* Right column: Stylized typographic brand logo (replacing technical card) */}
         <div className="lg:col-span-4 hidden lg:flex justify-end items-center relative select-none">
           <div className="absolute inset-0 bg-brand-orange/5 blur-[80px] rounded-full pointer-events-none"></div>
-          
-          <div className="font-sora font-extrabold text-right tracking-tighter flex flex-col justify-end items-end">
-            <span className="text-stroke text-[6.5vw] leading-[0.9] block hover:text-brand-orange transition-colors duration-500">RIV</span>
-            <span className="text-brand-orange text-[6.5vw] leading-[0.9] block">STUDIO</span>
-          </div>
+          <img 
+            src={logoImg} 
+            alt="Riv Studio Logo" 
+            className="w-full max-w-[280px] h-auto rounded-2xl border border-white/10 shadow-2xl transition-transform duration-500 hover:scale-[1.03]" 
+          />
         </div>
       </div>
 
