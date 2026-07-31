@@ -12,31 +12,39 @@ function BlobMesh({ mouse }) {
   
   useFrame((state) => {
     const time = state.clock.getElapsedTime();
+    const isMobileWidth = window.innerWidth < 768;
 
-    // 1. Slow auto-rotation on the Y axis (completely unaffected by mouse coordinates)
+    // 1. Slow auto-rotation on the Y axis
     meshRef.current.rotation.y = time * 0.12;
-    meshRef.current.rotation.x = 0; // lock rotation X
+    meshRef.current.rotation.x = 0; 
 
     // 2. Scroll calculations for base coordinate layouts (slide side-to-side and descend)
     const maxScroll = (document.documentElement.scrollHeight - window.innerHeight) || 1;
     const scrollPercent = window.scrollY / maxScroll;
 
-    // Base position X coordinate slides depending on scroll sections
-    let baseX = 1.3;
-    if (scrollPercent < 0.2) {
-      baseX = 1.3; // Hero (right)
-    } else if (scrollPercent >= 0.2 && scrollPercent < 0.45) {
-      baseX = -1.6; // Services (left)
-    } else if (scrollPercent >= 0.45 && scrollPercent < 0.75) {
-      baseX = 1.3; // Process (right)
-    } else if (scrollPercent >= 0.75 && scrollPercent < 0.9) {
-      baseX = -1.6; // Why Us (left)
-    } else {
-      baseX = 0; // Pricing/Footer (center)
+    // Center the blob on mobile screens (baseX = 0) so it doesn't float off-screen
+    // Slide side-to-side on desktop viewports
+    let baseX = 0;
+    if (!isMobileWidth) {
+      if (scrollPercent < 0.2) {
+        baseX = 1.3; // Hero (right)
+      } else if (scrollPercent >= 0.2 && scrollPercent < 0.45) {
+        baseX = -1.6; // Services (left)
+      } else if (scrollPercent >= 0.45 && scrollPercent < 0.75) {
+        baseX = 1.3; // Process (right)
+      } else if (scrollPercent >= 0.75 && scrollPercent < 0.9) {
+        baseX = -1.6; // Why Us (left)
+      } else {
+        baseX = 0; // Pricing/Footer (center)
+      }
     }
 
-    // Base Y floats down with scroll
-    const baseY = -scrollPercent * 3.5; 
+    // Base Y floats down with scroll, slightly adjusted on mobile
+    const baseY = -scrollPercent * (isMobileWidth ? 2.5 : 3.5); 
+
+    // Scale mesh dynamically based on screen width
+    const currentScale = isMobileWidth ? 0.95 : 1.4;
+    meshRef.current.scale.setScalar(currentScale);
 
     // Anchored X/Y coordinates (Mesh remains completely static under mouse hover, no drift)
     meshRef.current.position.x += (baseX - meshRef.current.position.x) * 0.06;
@@ -52,17 +60,17 @@ function BlobMesh({ mouse }) {
     const dy = mouseYThreeJS - meshRef.current.position.y;
     const distance = Math.sqrt(dx * dx + dy * dy);
 
-    let targetDistort = 0.35; // Default calm state (semi-solid morphs)
+    let targetDistort = 0.35; // Default calm state
     let targetSpeed = 1.2;
 
     // Hover detection: if cursor is near the mesh, transform into liquid texture
     if (distance < 1.3) {
-      const proximity = 1 - (distance / 1.3); // 0 (far) to 1 (directly over it)
-      targetDistort = 0.35 + (proximity * 0.55); // rises to 0.9 (liquidity morph)
-      targetSpeed = 1.2 + (proximity * 2.8);      // rises to 4.0 (fast liquid ripples)
+      const proximity = 1 - (distance / 1.3);
+      targetDistort = 0.35 + (proximity * 0.55); // rises to 0.9 (liquidity)
+      targetSpeed = 1.2 + (proximity * 2.8);      // rises to 4.0 (liquid speed)
     }
 
-    // Smoothly animate the material parameters towards the liquid targets
+    // Smoothly animate the material parameters
     if (materialRef.current) {
       materialRef.current.distort += (targetDistort - materialRef.current.distort) * 0.08;
       materialRef.current.speed += (targetSpeed - materialRef.current.speed) * 0.08;
@@ -82,11 +90,11 @@ function BlobMesh({ mouse }) {
   });
 
   return (
-    <mesh ref={meshRef} scale={1.4}>
+    <mesh ref={meshRef}>
       <sphereGeometry args={[1, 64, 64]} />
       <MeshDistortMaterial
         ref={materialRef}
-        distort={0.35} // Animate dynamically in useFrame
+        distort={0.35}
         speed={1.2}
         roughness={0.15}
         metalness={0.35}
@@ -98,16 +106,9 @@ function BlobMesh({ mouse }) {
 }
 
 export default function BlobCanvas() {
-  const [isMobile, setIsMobile] = useState(false);
   const mouse = useRef({ x: 0, y: 0 });
 
   useEffect(() => {
-    const checkViewport = () => {
-      setIsMobile(window.innerWidth < 768);
-    };
-    checkViewport();
-    window.addEventListener('resize', checkViewport);
-
     // Global mouse tracking
     const handleMouseMove = (e) => {
       mouse.current.x = (e.clientX / window.innerWidth) * 2 - 1;
@@ -116,19 +117,9 @@ export default function BlobCanvas() {
     window.addEventListener('mousemove', handleMouseMove);
 
     return () => {
-      window.removeEventListener('resize', checkViewport);
       window.removeEventListener('mousemove', handleMouseMove);
     };
   }, []);
-
-  if (isMobile) {
-    // High-performance static gradient fallback
-    return (
-      <div className="absolute top-1/2 right-[5%] -translate-y-1/2 w-[70vw] h-[70vw] max-w-[320px] max-h-[320px] flex items-center justify-center pointer-events-none z-0">
-        <div className="w-[85%] h-[85%] rounded-full bg-gradient-to-tr from-[#FF5500] via-[#EC4899] to-[#3B82F6] blur-[60px] opacity-40 animate-pulse duration-[6000ms]" />
-      </div>
-    );
-  }
 
   return (
     <div className="fixed inset-0 w-full h-full pointer-events-none z-10 overflow-visible">
